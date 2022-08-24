@@ -1,11 +1,9 @@
 import { Stack, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { podApiProvider } from './api/PodApi';
 import './App.css';
 import DatePicker from './components/DatePicker/DatePicker';
 import NasaImage from './components/NasaImage/NasaImage';
-
-
-const API_KEY = 'a1bbeWI006WxvNpY7Oi6idM2s9gt70iRv2lzj5Rp'
 
 function App() {
   const [podUrl, setpodUrl] = useState("")
@@ -13,21 +11,12 @@ function App() {
   const [podExplanation, setPodExplanation] = useState("")
   const [date, setDate] = useState(new Date())
 
-  const formatDate = (date: Date) => {
-    const dd = String(date.getDate()).padStart(2, '0');
-    const mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
-    const yyyy = date.getFullYear();
-    return `${yyyy}-${mm}-${dd}`
-  }
-
   useEffect(() => {
     const fetchData = async () => {
-        const url = `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}&date=${formatDate(date)}`
-        const response = await fetch(url)
-        const data = await response.json()
-        setpodUrl(data.url)
-        setPodMediaType(data.media_type)
-        setPodExplanation(data.explanation)
+        const podData = await podApiProvider.fetchPodData(date)
+        setpodUrl(podData.url)
+        setPodMediaType(podData.media_type)
+        setPodExplanation(podData.explanation)
     }
     
     fetchData()
