@@ -8,6 +8,7 @@ const formatDate = (date: Date) => {
   }
 
 const fetchPodData = async (date: Date) => {
+    // const url = `http://35.203.189.118/v1/apod/?date=${formatDate(date)}`
     const url = `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}&date=${formatDate(date)}`
     const response = await fetch(url)
     return response.json()
